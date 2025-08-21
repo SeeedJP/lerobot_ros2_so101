@@ -61,7 +61,7 @@ cd ~/ros2_ws/src/lerobot_ros2_so101
 uv sync
 ```
 
-# Build lerobot_ros2_so101
+## Build lerobot_ros2_so101
 
 Build the ROS2 package.
 
@@ -72,7 +72,7 @@ source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
 colcon build --packages-select lerobot_ros2_so101 --symlink-install
 ```
 
-# Run lerobot_ros2_so101
+# Run Leader Arm -> lerobot_ros2_so101 -> RViz
 
 Set permissions for /dev/ttyACM0.
 
@@ -90,9 +90,21 @@ source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
 ros2 run lerobot_ros2_so101 leader_node.py
 ```
 
+Visualize SO-101 using RViz.
+
+```
+cd ~/Lerobot_ros2
+source /opt/ros/humble/setup.bash
+source ./install/setup.sh
+export DISPLAY=:0.0
+ros2 launch so101_follower_description display.launch.py use_gui:=false joint_states_topic:=/joint_states
+```
+
 # Appendix
 
-## Calibrate the leader arm
+## Calibration
+
+### Calibrate the leader arm
 
 ```
 cd ~/ros2_ws/src/lerobot_ros2_so101
@@ -102,7 +114,17 @@ uv run -- python -m lerobot.calibrate \
     --teleop.port=/dev/ttyACM0
 ```
 
-## Calibration file
+### Calibrate the follower arm
+
+```
+cd ~/ros2_ws/src/lerobot_ros2_so101
+uv run -- python -m lerobot.calibrate \
+    --robot.id=lerobot_follower \
+    --robot.type=so101_follower \
+    --robot.port=/dev/ttyACM0
+```
+
+### Calibration file
 
 `/home/jetson/.cache/huggingface/lerobot/calibration/teleoperators/so101_leader/lerobot_leader.json`
 
