@@ -72,7 +72,7 @@ source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
 colcon build --packages-select lerobot_ros2_so101 --symlink-install
 ```
 
-# Run Leader Arm -> lerobot_ros2_so101 -> RViz
+# Run Leader arm -> leader node -> RViz
 
 Set permissions for /dev/ttyACM0.
 
@@ -80,14 +80,14 @@ Set permissions for /dev/ttyACM0.
 sudo chmod 666 /dev/ttyACM0
 ```
 
-Run the ROS2 node.
+Run the ROS2 leader node.
 
 ```
 cd ~/ros2_ws
 source /opt/ros/humble/setup.bash
 source ./install/setup.sh
 source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
-ros2 run lerobot_ros2_so101 leader_node.py
+ros2 run lerobot_ros2_so101 leader_node.py --ros-args -p port:=/dev/ttyACM1
 ```
 
 Visualize SO-101 using RViz.
@@ -98,6 +98,36 @@ source /opt/ros/humble/setup.bash
 source ./install/setup.sh
 export DISPLAY=:0.0
 ros2 launch so101_follower_description display.launch.py use_gui:=false joint_states_topic:=/joint_states
+```
+
+# Run follower node -> Follower arm
+
+Set permissions for /dev/ttyACM0.
+
+```
+sudo chmod 666 /dev/ttyACM0
+```
+
+Run the ROS2 follower node.
+
+```
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+source ./install/setup.sh
+source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
+ros2 run lerobot_ros2_so101 follower_node.py --ros-args -p port:=/dev/ttyACM0 -p joint_states:=/f_joint_states -p joint_commands:=/joint_states
+```
+
+Move the follower arm.
+
+```
+ros2 topic pub -1 /joint_commands sensor_msgs/msg/JointState "{
+  header: {stamp: {sec: 0, nanosec: 0}, frame_id: ''},
+  name: ['shoulder_pan','shoulder_lift','elbow_flex','wrist_flex','wrist_roll','gripper'],
+  position: [-0.1,-1.8,1.5,1.2,0,0],
+  velocity: [],
+  effort: []
+}"
 ```
 
 # Appendix

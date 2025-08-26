@@ -12,6 +12,7 @@ find_package(rclpy REQUIRED)
 ament_python_install_package(${PROJECT_NAME} PACKAGE_DIR src/${PROJECT_NAME})
 
 install(PROGRAMS scripts/leader_node.py DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS scripts/follower_node.py DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
