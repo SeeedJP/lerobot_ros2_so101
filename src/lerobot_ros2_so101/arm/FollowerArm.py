@@ -52,4 +52,8 @@ class FollowerArm:
             print(f"WARNING: motors not defined. {missing}")
             return
         for k, v in positions.items():
-            self.bus.write("Goal_Position", k, v, normalize=False)
+            try:
+                self.bus.write("Goal_Position", k, v, normalize=False)
+            except RuntimeError as e:
+                print(e)
+                pass

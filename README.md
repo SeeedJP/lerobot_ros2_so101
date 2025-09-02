@@ -72,7 +72,7 @@ source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
 colcon build --packages-select lerobot_ros2_so101 --symlink-install
 ```
 
-# Run Leader arm -> leader node -> RViz
+# Run leader node
 
 Set permissions for /dev/ttyACM0.
 
@@ -87,8 +87,10 @@ cd ~/ros2_ws
 source /opt/ros/humble/setup.bash
 source ./install/setup.sh
 source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
-ros2 run lerobot_ros2_so101 leader_node.py --ros-args -p port:=/dev/ttyACM1
+ros2 run lerobot_ros2_so101 leader_node.py --ros-args -p port:=/dev/ttyACM0
 ```
+
+# Run RViz
 
 Visualize SO-101 using RViz.
 
@@ -100,12 +102,12 @@ export DISPLAY=:0.0
 ros2 launch so101_follower_description display.launch.py use_gui:=false joint_states_topic:=/joint_states
 ```
 
-# Run follower node -> Follower arm
+# Run follower node
 
-Set permissions for /dev/ttyACM0.
+Set permissions for /dev/ttyACM1.
 
 ```
-sudo chmod 666 /dev/ttyACM0
+sudo chmod 666 /dev/ttyACM1
 ```
 
 Run the ROS2 follower node.
@@ -115,13 +117,13 @@ cd ~/ros2_ws
 source /opt/ros/humble/setup.bash
 source ./install/setup.sh
 source ~/ros2_ws/src/lerobot_ros2_so101/.venv/bin/activate
-ros2 run lerobot_ros2_so101 follower_node.py --ros-args -p port:=/dev/ttyACM0 -p joint_states:=/f_joint_states -p joint_commands:=/joint_states
+ros2 run lerobot_ros2_so101 follower_node.py --ros-args -p port:=/dev/ttyACM1 -p joint_states:=/f_joint_states -p joint_commands:=/joint_states
 ```
 
 Move the follower arm.
 
 ```
-ros2 topic pub -1 /joint_commands sensor_msgs/msg/JointState "{
+ros2 topic pub -1 /joint_states sensor_msgs/msg/JointState "{
   header: {stamp: {sec: 0, nanosec: 0}, frame_id: ''},
   name: ['shoulder_pan','shoulder_lift','elbow_flex','wrist_flex','wrist_roll','gripper'],
   position: [-0.1,-1.8,1.5,1.2,0,0],
@@ -151,7 +153,7 @@ cd ~/ros2_ws/src/lerobot_ros2_so101
 uv run -- python -m lerobot.calibrate \
     --robot.id=lerobot_follower \
     --robot.type=so101_follower \
-    --robot.port=/dev/ttyACM0
+    --robot.port=/dev/ttyACM1
 ```
 
 ### Calibration file
