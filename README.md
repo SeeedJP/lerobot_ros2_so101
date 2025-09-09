@@ -1,3 +1,10 @@
+This repository is a ROS node project that enables control of the LeRobot SO-101 Leader Arm and Follower Arm with ROS2.
+
+<img src="media/1.jpg" width="400" />
+
+<img src="media/2.jpg" width="200" />
+<img src="media/3.jpg" width="200" />
+
 # Environment setup
 
 * JetPack 6.0 (L4T 36.3 - Ubuntu 22.04 based)
@@ -249,6 +256,7 @@ vi ~/ros2_ws/src/lerobot_ros2_so101/CMakeLists.txt
 
 # Links
 
+* [LeRobot](https://github.com/huggingface/lerobot)
 * [LeRobot SO-101 テレオペから学習データ取得まで](https://zenn.dev/karaage0703/articles/8042463b476fbf)
 * [Jetson OrinでROS2 Humble入門](https://zenn.dev/karaage0703/articles/d778d660703c0b)
 * [PythonのuvをROS2で使う](https://qiita.com/GesonAnko/items/510eeade1f8ada302b9b)
